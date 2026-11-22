@@ -20,7 +20,7 @@ case "${1:-start}" in
     echo "Waiting for the world to save..."
     sleep 10
     tmux kill-session -t geyser 2>/dev/null
-    tmux kill-session -t playit 2>/dev/null
+    tmux kill-session -t playitd 2>/dev/null
     tmux kill-session -t mc 2>/dev/null
     echo "Stopped. You can now stop the Codespace (Codespaces menu > Stop current codespace)."
     exit 0
@@ -40,12 +40,12 @@ run mc "$ROOT/server" "java -Xms1G -Xmx3G -DPaper.IgnoreJavaVersion=true \
 
 [ -f "$ROOT/geyser/Geyser-Standalone.jar" ] && run geyser "$ROOT/geyser" "java -Xmx512M -jar Geyser-Standalone.jar --nogui"
 
-if [ -x "$ROOT/tools/playit" ]; then
-  if [ -n "${PLAYIT_SECRET:-}" ]; then
-    run playit "$ROOT/tools" "./playit -s \"$PLAYIT_SECRET\""
-  else
-    run playit "$ROOT/tools" "./playit"
-  fi
+if command -v playitd >/dev/null 2>&1; then
+  # playitd needs this socket folder; it doesn't survive a Codespace rebuild
+  sudo mkdir -p /run/playit && sudo chown "$USER" /run/playit
+  run playitd "$ROOT" "playitd"
+else
+  echo "  playit is not installed (see README: Tunnels), skipping Java/Bedrock tunnel"
 fi
 
 # Try to make the web port public so Eaglercraft players can connect
@@ -58,6 +58,6 @@ if [ -n "${CODESPACE_NAME:-}" ]; then
 fi
 echo
 echo "Console:        tmux attach -t mc        (detach with Ctrl+B then D)"
-echo "Tunnel/claim:   tmux attach -t playit    (first run prints a link to claim the tunnel)"
+echo "Tunnel status:  playit attach            (first time only: playit setup, then add tunnels in the playit dashboard)"
 echo "Bedrock log:    tmux attach -t geyser"
 echo "Whitelist:      in the mc console type  whitelist add PlayerName"

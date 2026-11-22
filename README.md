@@ -23,11 +23,11 @@ By running this you accept the Minecraft EULA (`setup.sh` writes `eula=true`): h
 
 ## Tunnels for Java and Bedrock (playit.gg, free)
 
-1. `tmux attach -t playit` and open the claim link it prints. Make a playit account (email only) and claim the agent. Detach with Ctrl+B then D.
+1. Run `bash start.sh` (it starts the playit daemon), then run `playit setup` once and open the claim link it prints. Make a playit account (email only) and approve the agent. Check it with `playit attach`.
 2. In the playit dashboard, create two tunnels pointing at this agent:
    - **Minecraft Java** (TCP) to `127.0.0.1` port `25565`
    - **Minecraft Bedrock** (UDP) to `127.0.0.1` port `19132`
-3. Share the addresses playit shows you. If you want the tunnel to survive new Codespaces, copy the agent secret from the dashboard and save it as a Codespaces secret named `PLAYIT_SECRET` (GitHub > Settings > Codespaces > Secrets). `start.sh` uses it automatically.
+3. Share the addresses playit shows you. A brand-new Codespace needs `playit setup` again.
 
 ## Eaglercraft web client
 

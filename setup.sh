@@ -64,8 +64,11 @@ dl "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/late
    "$GEYSER/Geyser-Standalone.jar" 5000000 || FAILED+=("Geyser standalone")
 
 echo "==> playit.gg agent (free tunnel for Java + Bedrock)"
-dl "https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-linux-amd64" \
-   "$TOOLS/playit" 1000000 && chmod +x "$TOOLS/playit" || FAILED+=("playit agent")
+( curl -SsL https://playit-cloud.github.io/ppa/key.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/playit.gpg >/dev/null \
+  && echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit-cloud.list >/dev/null \
+  && sudo apt-get update -qq && sudo apt-get install -y -qq playit >/dev/null 2>&1 ) \
+  || FAILED+=("playit apt package (see README: Tunnels)")
+# (systemd errors during the apt install are normal in a Codespace)
 
 echo "==> Server files"
 # Accepting the Minecraft EULA: https://aka.ms/MinecraftEULA
