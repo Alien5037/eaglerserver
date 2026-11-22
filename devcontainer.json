@@ -1,0 +1,23 @@
+{
+  "name": "Minecraft 1.12.2 + Eaglercraft + Bedrock",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installMaven": "false",
+      "installGradle": "false"
+    }
+  },
+  "hostRequirements": {
+    "cpus": 2
+  },
+  "forwardPorts": [25565],
+  "portsAttributes": {
+    "25565": {
+      "label": "Minecraft + Eaglercraft (wss)",
+      "protocol": "https",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "bash setup.sh"
+}
