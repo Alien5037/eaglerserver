@@ -47,11 +47,7 @@ PY
 }
 
 echo "==> Paper 1.12.2"
-BUILD=$(curl -fsSL https://api.papermc.io/v2/projects/paper/versions/1.12.2 2>/dev/null \
-  | python3 -c 'import json,sys; print(json.load(sys.stdin)["builds"][-1])' 2>/dev/null)
-BUILD="${BUILD:-1618}"
-dl "https://api.papermc.io/v2/projects/paper/versions/1.12.2/builds/$BUILD/downloads/paper-1.12.2-$BUILD.jar" \
-   "$SERVER/paper.jar" 1000000 || FAILED+=("Paper 1.12.2 (put a paper.jar in server/ yourself)")
+bash "$ROOT/get-paper.sh" || FAILED+=("Paper 1.12.2 (run: bash get-paper.sh and read its message)")
 
 echo "==> Plugins (Modrinth)"
 for slug in eaglercraftxserver viaversion viabackwards viarewind; do
